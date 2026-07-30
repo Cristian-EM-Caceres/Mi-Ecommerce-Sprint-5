@@ -2,102 +2,81 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './home.css';
 
-
 function Home() {
-  const sugeridos = []; 
-  const topProducts = [
-    { id: 19, nombre: "Camiseta Oficial Especial", precio: "159.999", imagen: "" }
-  ];
+  // MOCKS: Datos simulados para dejar listo cuando se implementen sesiones y base de datos
+  const sessionData = {
+    userName: "Administrador",
+  };
+  const statsData = {
+    totalProducts: 124,
+    totalCategories: 8
+  };
 
   return (
-    <main className="contenedor">
-      {/* Sección de Sugeridos */}
-      <h2 className="Titulos1">Te puede interesar</h2>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', marginBottom: '30px', width: '100%' }}>
-        {sugeridos.length > 0 ? (
-          sugeridos.map(producto => (
-            <Link key={producto.id} className="link" to={`/products/${producto.id}`}>
-              <section className="tarjeta">
-                <h2>{producto.nombre}</h2>
-                <ul>
-                  <img 
-                    src={producto.imagen ? producto.imagen : 'https://placehold.co/300x300?text=Sin+Imagen'} 
-                    alt={producto.nombre} 
-                  />
-                  <li>$ {producto.precio}</li>
-                  <li>Los productos personalizados no están sujetos a cambios y/o devoluciones.</li>
-                </ul>
-              </section>
+    <div className="dashboard-home">
+      
+      <header className="dashboard-header">
+        <h1>¡Hola {sessionData.userName}!</h1>
+        <p>Bienvenido al Panel de Gestión. ¿Qué te gustaría hacer hoy?</p>
+      </header>
+
+      <div className="dashboard-modules">
+        <section className="dashboard-module">
+          <div className="module-header">
+            <span className="module-icon">📦</span>
+            <h2>Productos</h2>
+          </div>
+          
+          <div className="module-kpi">
+            <span className="kpi-number">{statsData.totalProducts}</span>
+            <span className="kpi-label">Productos distintos</span>
+          </div>
+          
+          <div className="module-actions">
+            <Link to="/products" className="action-btn secondary">
+              Ver Listado
             </Link>
-          ))
-        ) : (
-          <p style={{ color: '#666' }}>No hay sugerencias en este momento.</p>
-        )}
+            <Link to="/products/new" className="action-btn primary">
+              Agregar Producto
+            </Link>
+          </div>
+        </section>
+
+        <section className="dashboard-module">
+          <div className="module-header">
+            <span className="module-icon">🏷️</span>
+            <h2>Categorías</h2>
+          </div>
+          
+          <div className="module-kpi">
+            <span className="kpi-number">{statsData.totalCategories}</span>
+            <span className="kpi-label">Categorías registradas</span>
+          </div>
+          
+          <div className="module-actions">
+            <Link to="/categories" className="action-btn secondary">
+              Ver Listado
+            </Link>
+            <Link to="/categories/new" className="action-btn primary">
+              Agregar Categoría
+            </Link>
+          </div>
+        </section>
+
       </div>
 
-      <h2 className="Titulos1">Camisetas</h2>
-      <Link className="link" to="/products/1">
-        <section className="tarjeta">
-          <h2>Camiseta de Boca Juniors</h2>
-          <ul>
-            <img src="/img/boquita.jpg" alt="Boca" />
-            <li>$ 149.999</li>
-            <li>Los productos personalizados no están sujetos a cambios y/o devoluciones.</li>
-          </ul>
-        </section>
-      </Link>
-
-      <Link className="link" to="/products/2">
-        <section className="tarjeta">
-          <h2>Camiseta de River Plate</h2>
-          <img src="/img/river.jpg" alt="River" />
-          <li>$ 149.999</li>
-          <li>Los productos personalizados no están sujetos a cambios y/o devoluciones.</li>
-        </section>
-      </Link>
-
-      <Link className="link" to="/products/3">
-        <section className="tarjeta">
-          <h2>Camiseta de la Seleccion Argentina</h2>
-          <ul>
-            <img src="/img/seleccion.jpg" alt="Argentina" />
-            <li>$ 149.999</li>
-            <li>Los productos personalizados no están sujetos a cambios y/o devoluciones.</li>
-          </ul>
-        </section>
-      </Link>
-
-      <h2 className="Titulos1">Botines</h2>
-      <section className="tarjeta">
-        <Link className="link" to="/products/7">
-          <h2>Zona de envío gratis</h2>
-          <img src="/img/botin1.jpg" alt="Botines" />
-          <p>Compra ahora</p>
-          <li>$ 149.999</li>
-          <li>Los productos personalizados no están sujetos a cambios y/o devoluciones.</li>
-        </Link>
+      {/* PLACEHOLDER: Futuros Gráficos */}
+      <section className="charts-section">
+        <h2>Estadísticas Generales</h2>
+        <div className="chart-placeholder">
+          <div className="chart-skeleton">
+            <p>📊 Espacio reservado para futuros gráficos y métricas</p>
+          </div>
+        </div>
       </section>
 
-      {/* Los más pedidos */}
-      <h2 className="Titulos1">Los más pedidos</h2>
-      {topProducts.map(producto => (
-        <Link key={producto.id} className="link" to={`/products/${producto.id}`}>
-          <section className="tarjeta">
-            <h2>{producto.nombre}</h2>
-            <ul>
-              <img 
-                src={producto.imagen ? producto.imagen : '/img/default-fallback.png'} 
-                alt={producto.nombre} 
-              />
-              <li>$ {producto.precio}</li>
-              <li>Los productos personalizados no están sujetos a cambios y/o devoluciones.</li>
-            </ul>
-          </section>
-        </Link>
-      ))}
-    </main>
+    </div>
   );
 }
-
 
 export default Home;
