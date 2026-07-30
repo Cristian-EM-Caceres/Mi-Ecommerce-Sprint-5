@@ -13,6 +13,8 @@ import ProductView from './pages/products/productsView/ProductView.js';
 const CategoriesView = () => <div className="contenedor"><h2>🗂️ Categorías</h2><p>Vista de categorías.</p></div>;
 const ProfileView = () => <div className="contenedor"><h2>👤 Perfil de Usuario</h2><p>Datos de la cuenta.</p></div>;
 const NotFound = () => <div className="contenedor"><h2>🚨 Error 404 - Página No Encontrada</h2></div>;
+const ProductForm = () => <div className="contenedor"><h2>➕ Módulo: Registrar/Modificar Producto</h2></div>;
+const CategoryForm = () => <div className="contenedor"><h2>➕ Módulo: Registrar/Modificar Categoría</h2></div>;
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -46,8 +48,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<ProductsList />} />
+              <Route path="/products/new" element={<ProductForm />} />
               <Route path="/products/:id" element={<ProductView />} />
               <Route path="/categories" element={<CategoriesView />} />
+              <Route path="/categories/new" element={<CategoryForm />} />
               <Route path="/profile" element={<ProfileView />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
