@@ -1,13 +1,85 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './ProductList.css';
+import { productsData } from '../productsData';
 
-const ProductsList = () => {
+function ProductList() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    setTimeout(() => {
+      setProducts(productsData);
+      setLoading(false);
+    }, 1500);
+  }, []);
+
+  const filteredProducts = products.filter(producto =>
+    producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="contenedor">
-      <h2>📦 Módulo: Lista General de Productos</h2> {/*[cite: 2] */}
-      <p>Aquí se gestionará el inventario.</p> {/*[cite: 2] */}
+    <div className="admin-product-list">
+      <header className="admin-header">
+        <h1 className="admin-title">Productos</h1>
+
+        <div className="admin-header-actions">
+          <div className="search-container">
+            <span className="search-icon"></span>
+            <input
+              type="text"
+              placeholder="Buscar por nombre..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="admin-search-input"
+            />
+          </div>
+
+          <Link to="/products/new" className="action-btn primary add-btn">
+            Agregar Producto
+          </Link>
+        </div>
+      </header>
+
+      <main className="admin-content">
+        {loading ? (
+          <div className="loading-state">
+            <span className="spinner"></span>
+            <p>Cargando...</p>
+          </div>
+        ) : (
+          <div className="products-grid">
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map(producto => (
+                <Link key={producto.id} to={`/products/${producto.id}`} className="admin-product-card">
+                  <div className="card-image-container">
+                    <img
+                      src={producto.img || '/img/default-fallback.png'}
+                      alt={producto.nombre}
+                    />
+                  </div>
+                  <div className="card-info">
+                    <span className="product-id">#{producto.id}</span>
+                    <h3>{producto.nombre}</h3>
+                    <p className="product-description">{producto.descripcion}</p>
+                    <div className="card-footer">
+                      <span className="price">${producto.precio}</span>
+                      <span className="stock">Stock: {producto.stock}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div className="no-results">
+                <p>No se encontraron productos que coincidan con la b�squeda.</p>
+              </div>
+            )}
+          </div>
+        )}
+      </main>
     </div>
   );
-};
+}
 
-export default ProductsList;
+export default ProductList;
