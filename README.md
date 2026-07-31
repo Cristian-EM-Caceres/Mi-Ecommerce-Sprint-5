@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+🏪 Dashboard de Gestión - Tienda (Sprint 5)
+Este proyecto es un Panel de Control (Dashboard) desarrollado para administrar de manera eficiente nuestra tienda inteligente. Construido como una Single Page Application (SPA) utilizando ReactJS (patrón MVC), este panel se comunica directamente con nuestra API REST (desarrollada en Express durante el Sprint 4) y marca nuestra transición oficial hacia el uso de bases de datos relacionales con SQLite.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🚀 Características Principales
+El dashboard permite al equipo de administración gestionar de forma gráfica y amigable las entidades principales de la aplicación:
 
-## Available Scripts
+📦 Módulo de Productos
+🗃️ Listar todos los productos con opción de búsqueda y filtrado en tiempo real.
 
-In the project directory, you can run:
+👁️ Ver los detalles específicos de cada producto.
 
-### `npm start`
+➕ Registrar nuevos productos de forma sencilla.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+✍🏻 Modificar información existente (nombre, descripción, precio, stock, imágenes).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+🗑️ Eliminar productos del catálogo.
 
-### `npm test`
+🏪 Módulo de Categorías
+🗃️ Ver y buscar en el listado de categorías.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+👁️ Ver los detalles de una categoría.
 
-### `npm run build`
+➕ Registrar, ✍🏻 modificar o 🗑️ eliminar categorías.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+📦 Asignar o remover productos de categorías específicas.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+👥 Módulo de Usuarios
+🗃️ Ver lista de usuarios.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+👁️ Ver los detalles, ➕ registrar, ✍🏻 modificar o 🗑️ eliminar usuarios.
 
-### `npm run eject`
+Nota: Preparado arquitectónicamente para el futuro sistema de autenticación real.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+🛠️ Tecnologías y Arquitectura
+Frontend: ReactJS (Componentes funcionales, modelo atómico).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Backend / API: Node.js + Express.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Base de Datos: SQLite (Migración completa desde almacenamiento local en JSON).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Patrón de Diseño: MVC (Modelo-Vista-Controlador) adaptado a SPA.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Diseño UI: Estructura responsiva dividida en Sidebar (Menú de navegación colapsable en pantallas < 1024px) y Main Area (Header + Content).
