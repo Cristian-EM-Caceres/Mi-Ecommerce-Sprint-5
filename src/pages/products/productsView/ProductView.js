@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './ProductView.css';
 
+const linkApi = 'http://localhost:3000/api';
+
 const ProductView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ const ProductView = () => {
 
     const cargarProducto = async () => {
       try {
-        const respuesta = await fetch(`/products/${id}`);
+        const respuesta = await fetch(`${linkApi}/products/${id}`);
         if (respuesta.ok) {
           const datos = await respuesta.json();
           setProductoOriginal(datos);
@@ -99,7 +101,7 @@ const ProductView = () => {
     };
 
     try {
-      await fetch(`/products/${id}/edit`, {
+      await fetch(`${linkApi}/products/${id}/edit`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

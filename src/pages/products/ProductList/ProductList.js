@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ProductList.css';
-import { productsData } from '../productsData';
+
 
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
+
   useEffect(() => {
-    setTimeout(() => {
-      setProducts(productsData);
-      setLoading(false);
-    }, 1500);
+    fetch('http://localhost:3000/api/products')
+      .then(respuesta => respuesta.json())
+      .then(datos => {
+        setProducts(datos); 
+        setLoading(false);  
+      })
+      .catch(error => {
+        console.error('Error al cargar productos:', error);
+        setLoading(false);
+      });
   }, []);
 
   const filteredProducts = products.filter(producto =>
@@ -46,7 +53,7 @@ function ProductList() {
         {loading ? (
           <div className="loading-state">
             <span className="spinner"></span>
-            <p>Cargando...</p>
+            <p>Cargando datos desde la API...</p>
           </div>
         ) : (
           <div className="products-grid">
@@ -54,6 +61,7 @@ function ProductList() {
               filteredProducts.map(producto => (
                 <Link key={producto.id} to={`/products/${producto.id}`} className="admin-product-card">
                   <div className="card-image-container">
+
                     <img
                       src={producto.img || '/img/default-fallback.png'}
                       alt={producto.nombre}
@@ -62,7 +70,7 @@ function ProductList() {
                   <div className="card-info">
                     <span className="product-id">#{producto.id}</span>
                     <h3>{producto.nombre}</h3>
-                    <p className="product-description">{producto.descripcion}</p>
+                    <p className="product-description">{producto.categoria || 'Sin descripción'}</p>
                     <div className="card-footer">
                       <span className="price">${producto.precio}</span>
                       <span className="stock">Stock: {producto.stock}</span>
@@ -72,7 +80,7 @@ function ProductList() {
               ))
             ) : (
               <div className="no-results">
-                <p>No se encontraron productos que coincidan con la b�squeda.</p>
+                <p>No se encontraron productos que coincidan con la búsqueda.</p>
               </div>
             )}
           </div>

@@ -1,16 +1,26 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import './home.css';
+import React, { useState, useEffect } from 'react';
+
 
 function Home() {
-  // MOCKS: Datos simulados para dejar listo cuando se implementen sesiones y base de datos
   const sessionData = {
     userName: "Administrador",
   };
-  const statsData = {
-    totalProducts: 124,
-    totalCategories: 8
-  };
+  
+  const [statsData, setStatsData] = useState({
+    totalProducts: 0,
+    totalCategories: 0
+  });
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/stats')
+      .then(respuesta => respuesta.json())
+      .then(datos => {
+        setStatsData(datos);
+      })
+      .catch(error => console.error('Error al cargar estadísticas:', error));
+  }, []); 
 
   return (
     <div className="dashboard-home">
@@ -62,10 +72,8 @@ function Home() {
             </Link>
           </div>
         </section>
-
       </div>
 
-      {/* PLACEHOLDER: Futuros Gráficos */}
       <section className="charts-section">
         <h2>Estadísticas Generales</h2>
         <div className="chart-placeholder">
