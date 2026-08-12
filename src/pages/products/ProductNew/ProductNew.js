@@ -44,7 +44,7 @@ const ProductNew = () => {
   const guardarProducto = async (e) => {
     e.preventDefault();
     
-    // Validación de nombre requerido (el required de HTML5 también ayuda)
+    // Validación de nombre requerido
     if (!datosFormulario.nombre.trim()) {
       alert("El nombre del producto es obligatorio.");
       return;
@@ -57,8 +57,8 @@ const ProductNew = () => {
     };
 
     try {
-      // Petición POST a la API
-      const respuesta = await fetch('/products/new', {
+      // Petición POST apuntando directamente a la API de tu backend (Puerto 3000)
+      const respuesta = await fetch('http://localhost:3000/api/products', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -67,16 +67,16 @@ const ProductNew = () => {
       });
 
       if (respuesta.ok) {
-        alert("Producto creado exitosamente");
+        alert("¡Producto creado exitosamente!");
         navigate('/products'); // Redirige al listado
       } else {
+        const errorData = await respuesta.json();
+        console.error("Error del servidor:", errorData);
         alert("Hubo un error al crear el producto.");
       }
     } catch (error) {
-      console.error('Error al guardar:', error);
-      // MOCK: Para pruebas locales sin API, simulamos éxito:
-      alert("Simulación: Producto creado exitosamente");
-      navigate('/products');
+      console.error('Error de red al guardar:', error);
+      alert("No se pudo conectar con el servidor backend.");
     }
   };
 

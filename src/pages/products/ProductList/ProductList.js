@@ -80,7 +80,7 @@ function ProductList() {
               ))
             ) : (
               <div className="no-results">
-                <p>No se encontraron productos que coincidan con la búsqueda.</p>
+                <p>No se encontraron productos que coincidan con la busqueda.</p>
               </div>
             )}
           </div>
