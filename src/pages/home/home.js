@@ -2,12 +2,10 @@ import { Link } from 'react-router-dom';
 import './home.css';
 import React, { useState, useEffect } from 'react';
 
-
 function Home() {
   const sessionData = {
     userName: "Administrador",
   };
-  
   const [statsData, setStatsData] = useState({
     totalProducts: 0,
     totalCategories: 0

@@ -20,7 +20,6 @@ const ProductView = () => {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-
     const cargarProducto = async () => {
       try {
         const respuesta = await fetch(`${linkApi}/products/${id}`);
@@ -28,7 +27,6 @@ const ProductView = () => {
           const datos = await respuesta.json();
           setProductoOriginal(datos);
           
-
           setDatosFormulario({
             ...datos,
             precio: datos.precio ? parseInt(datos.precio, 10) : 0,
@@ -93,15 +91,15 @@ const ProductView = () => {
   const guardarCambios = async (e) => {
     e.preventDefault();
     
-
     const datosAEnviar = {
       ...datosFormulario,
       precio: parseInt(datosFormulario.precio, 10) || 0,
-      stock: parseInt(datosFormulario.stock, 10) || 0
+      stock: parseInt(datosFormulario.stock, 10) || 0,
+      imagen: datosFormulario.img || productoOriginal.img || productoOriginal.imagen
     };
 
     try {
-      await fetch(`${linkApi}/products/${id}/edit`, {
+      await fetch(`${linkApi}/products/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -110,20 +108,31 @@ const ProductView = () => {
       });
       
       setProductoOriginal(datosAEnviar);
+      alert("¡Cambios guardados exitosamente!");
     } catch (error) {
       console.error('Error al guardar:', error);
     }
   };
 
-  const eliminarProducto = async () => {
+  // Función corregida para manejar la eliminación
+  const manejarEliminar = async () => {
+    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
+    if (!confirmar) return;
+
     try {
-      await fetch(`/products/${id}/delete`, {
-        method: 'DELETE'
+      const respuesta = await fetch(`${linkApi}/products/${id}`, {
+        method: 'DELETE',
       });
-      
-      navigate('/products'); 
+
+      if (respuesta.ok || respuesta.status === 204) {
+        alert("¡Producto eliminado exitosamente!");
+        navigate('/products');
+      } else {
+        alert("Hubo un error al intentar eliminar el producto.");
+      }
     } catch (error) {
-      console.error('Error al eliminar:', error);
+      console.error("Error de red al eliminar:", error);
+      alert("No se pudo conectar con el servidor backend.");
     }
   };
 
@@ -131,15 +140,14 @@ const ProductView = () => {
     <div className="product-view">
       <div className="product-view-card">
         
-
         <div className="product-view-header-top">
           <div className="breadcrumb-title">
             <Link to="/products" className="breadcrumb-link">Productos</Link> &gt; #{id}
           </div>
-          <button onClick={eliminarProducto} className="top-delete-btn">Eliminar</button>
+          {/* CORREGIDO: Apunta a manejarEliminar en lugar de eliminarProducto */}
+          <button onClick={manejarEliminar} className="top-delete-btn">Eliminar</button>
         </div>
         
-
         <div className="product-view-main" style={{ marginTop: '30px' }}>
           <div className="product-view-image" style={{ minHeight: '150px', width: '150px' }}>
             <img src={productoOriginal.img || '/img/default-fallback.png'} alt={productoOriginal.nombre} style={{ borderRadius: '16px' }} />
@@ -163,7 +171,6 @@ const ProductView = () => {
             
             <div className="form-group">
               <label>Nombre</label>
-
               <input 
                 type="text" 
                 name="nombre" 
@@ -175,7 +182,6 @@ const ProductView = () => {
 
             <div className="form-group">
               <label>Valor</label>
-
               <input 
                 type="number" 
                 name="precio" 
@@ -189,7 +195,6 @@ const ProductView = () => {
 
             <div className="form-group">
               <label>Stock</label>
-
               <div className="stock-control">
                 <button type="button" onClick={() => cambiarStock(-1)} className="btn-stock">➖</button>
                 <input 
@@ -207,7 +212,6 @@ const ProductView = () => {
 
             <div className="form-group">
               <label>Descripción</label>
-              
               <textarea 
                 name="descripcion" 
                 value={datosFormulario.descripcion} 
