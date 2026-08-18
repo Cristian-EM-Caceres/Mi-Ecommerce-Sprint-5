@@ -67,15 +67,16 @@ function ProductList() {
                       alt={producto.nombre}
                     />
                   </div>
-                  <div className="card-info">
-                    <span className="product-id">#{producto.id}</span>
-                    <h3>{producto.nombre}</h3>
-                    <p className="product-description">{producto.categoria || 'Sin descripción'}</p>
-                    <div className="card-footer">
-                      <span className="price">${producto.precio}</span>
-                      <span className="stock">Stock: {producto.stock}</span>
-                    </div>
-                  </div>
+                  <div className="card-info" style={{ width: '100%', display: 'flex', flexDirection: 'column', flex: '1' }}>
+  <span className="product-id">#{producto.id}</span>
+  <h3 className="card-title" style={{ margin: '5px 0' }}>{producto.nombre}</h3>
+  <p className="product-description">{producto.categoria || 'Sin descripción'}</p>
+  
+  <div className="card-footer">
+    <span className="price">$ {producto.precio.toLocaleString('es-AR')}</span>
+    <span className="stock">Stock: {producto.stock}</span>
+  </div>
+</div>
                 </Link>
               ))
             ) : (
