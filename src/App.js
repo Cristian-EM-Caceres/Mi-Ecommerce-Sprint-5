@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState } from 'react'; ////el useState sirve para que la aplicación tenga "memoria"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';////es como un gps permite navegar entre diferentes páginas sin que la web entera tenga que recargarse.
 import './App.css';
 
 import MainMenu from './components/MainMenu/MainMenu';
@@ -8,9 +8,9 @@ import Home from './pages/home/home.js';
 import ProductsList from './pages/products/ProductList/ProductList.js';
 import ProductView from './pages/products/productsView/ProductView.js';
 import ProductNew from './pages/products/ProductNew/ProductNew.js';
+import CategoriesView from './pages/products/Categories/CategorieList/CategorieList.js';
 
 
-const CategoriesView = () => <div className="contenedor"><h2>🗂️ Categorías</h2><p>Vista de categorías.</p></div>;
 const ProfileView = () => <div className="contenedor"><h2>👤 Perfil de Usuario</h2><p>Datos de la cuenta.</p></div>;
 const NotFound = () => <div className="contenedor"><h2>404 - Página no encontrada</h2></div>;
 const CategoryForm = () => <div className="contenedor"><h2>➕ Módulo: Registrar/Modificar Categoría</h2></div>;

@@ -1,31 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './ProductNew.css';
 
 const ProductNew = () => {
   const navigate = useNavigate();
 
-  // Estado inicial del formulario con los valores por defecto requeridos
   const [datosFormulario, setDatosFormulario] = useState({
     nombre: '',
     precio: 0,
     stock: 0,
     descripcion: '',
     tienda: '',
-    img: ''
+    img: '',
+    categoria: ''
   });
+
+  const [categorias, setCategorias] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/categories')
+      .then(respuesta => respuesta.json())
+      .then(datos => setCategorias(datos))
+      .catch(error => console.error('Error al cargar categorías:', error));
+  }, []);
 
   const manejarCambioInput = (e) => {
     const { name, value } = e.target;
-    
     let valorProcesado = value;
-    
-    // Validación: precio y stock deben ser enteros (por defecto 0)
     if (name === 'precio' || name === 'stock') {
       valorProcesado = value === '' ? 0 : parseInt(value, 10);
       if (isNaN(valorProcesado)) valorProcesado = 0;
     }
-
     setDatosFormulario({ ...datosFormulario, [name]: valorProcesado });
   };
 
@@ -36,28 +41,42 @@ const ProductNew = () => {
     }));
   };
 
+  const manejarSubidaImagen = (e) => {
+    const archivo = e.target.files[0];
+    if (archivo) {
+      const lector = new FileReader();
+      lector.onloadend = () => {
+        setDatosFormulario({ ...datosFormulario, img: lector.result });
+      };
+      lector.readAsDataURL(archivo); 
+    }
+  };
+
   const cancelarCreacion = () => {
-    // Si cancela, lo devolvemos al listado de productos
     navigate('/products');
   };
 
   const guardarProducto = async (e) => {
     e.preventDefault();
-    
-    // Validación de nombre requerido
+
     if (!datosFormulario.nombre.trim()) {
       alert("El nombre del producto es obligatorio.");
+      return;
+    }
+
+    if (!datosFormulario.categoria) {
+      alert("Debes seleccionar una categoría.");
       return;
     }
 
     const datosAEnviar = {
       ...datosFormulario,
       precio: parseInt(datosFormulario.precio, 10) || 0,
-      stock: parseInt(datosFormulario.stock, 10) || 0
+      stock: parseInt(datosFormulario.stock, 10) || 0,
+      imagen: datosFormulario.img
     };
 
     try {
-      // Petición POST apuntando directamente a la API de tu backend (Puerto 3000)
       const respuesta = await fetch('http://localhost:3000/api/products', {
         method: 'POST',
         headers: {
@@ -68,10 +87,9 @@ const ProductNew = () => {
 
       if (respuesta.ok) {
         alert("¡Producto creado exitosamente!");
-        navigate('/products'); // Redirige al listado
+        navigate('/products');
       } else {
-        const errorData = await respuesta.json();
-        console.error("Error del servidor:", errorData);
+        console.error("Error del servidor");
         alert("Hubo un error al crear el producto.");
       }
     } catch (error) {
@@ -83,7 +101,7 @@ const ProductNew = () => {
   return (
     <div className="productnew">
       <div className="productnewcard">
-        
+
         <div className="productnew.headertop">
           <div className="breadcrumb-title">
             <Link to="/products" className="breadcrumb-link">Productos</Link> &gt; Nuevo Producto
@@ -93,29 +111,55 @@ const ProductNew = () => {
         <div className="edit-section" style={{ marginTop: '20px', borderTop: 'none' }}>
           <h3>Registrar Nuevo Producto</h3>
           <form className="edit-form" onSubmit={guardarProducto}>
-            
+
             <div className="formgroup">
               <label>Nombre *</label>
-              <input 
-                type="text" 
-                name="nombre" 
-                value={datosFormulario.nombre} 
-                onChange={manejarCambioInput} 
-                required 
-                placeholder="Ej. Teclado Mecánico"
+              <input
+                type="text"
+                name="nombre"
+                value={datosFormulario.nombre}
+                onChange={manejarCambioInput}
+                required
+                placeholder="Ej. Camiseta"
               />
             </div>
 
             <div className="form-group">
+              <label>Categoría *</label>
+              <select
+                name="categoria"
+                value={datosFormulario.categoria}
+                onChange={manejarCambioInput}
+                required
+              >
+                <option value="">Selecciona una categoría...</option>
+                {categorias.length > 0 ? (
+                  categorias.map(cat => (
+                    <option key={cat.id || cat.nombre} value={cat.nombre}>
+                      {cat.nombre}
+                    </option>
+                  ))
+                ) : (
+                  <>
+                    <option value="Camisetas">Camisetas</option>
+                    <option value="Botines">Botines</option>
+                    <option value="Guantes">Guantes</option>
+                    <option value="Pelotas">Pelotas</option>
+                  </>
+                )}
+              </select>
+            </div>
+
+            <div className="form-group">
               <label>Valor ($)</label>
-              <input 
-                type="number" 
-                name="precio" 
-                value={datosFormulario.precio} 
-                onChange={manejarCambioInput} 
+              <input
+                type="number"
+                name="precio"
+                value={datosFormulario.precio}
+                onChange={manejarCambioInput}
                 step="1"
                 min="0"
-                required 
+                required
               />
             </div>
 
@@ -123,11 +167,11 @@ const ProductNew = () => {
               <label>Stock</label>
               <div className="stock-control">
                 <button type="button" onClick={() => cambiarStock(-1)} className="btn-stock">➖</button>
-                <input 
-                  type="number" 
-                  name="stock" 
-                  value={datosFormulario.stock} 
-                  onChange={manejarCambioInput} 
+                <input
+                  type="number"
+                  name="stock"
+                  value={datosFormulario.stock}
+                  onChange={manejarCambioInput}
                   step="1"
                   min="0"
                   required
@@ -138,27 +182,39 @@ const ProductNew = () => {
 
             <div className="form-group">
               <label>Descripción</label>
-              <textarea 
-                name="descripcion" 
-                value={datosFormulario.descripcion} 
-                onChange={manejarCambioInput} 
+              <textarea
+                name="descripcion"
+                value={datosFormulario.descripcion}
+                onChange={manejarCambioInput}
                 rows="4"
                 placeholder="Descripción del producto (opcional)"
               ></textarea>
             </div>
 
             <div className="form-group">
-              <label>URL de la Imagen</label>
+              <label>Imagen del Producto</label>
+
+              {datosFormulario.img && (
+                <div className="image-preview-container">
+                  <img
+                    src={datosFormulario.img}
+                    alt="Vista previa"
+                    className="image-preview"
+                  />
+                </div>
+              )}
+
               <div className="image-control" style={{ display: 'flex', gap: '10px' }}>
-                <input 
-                  type="text" 
-                  name="img" 
-                  value={datosFormulario.img} 
-                  onChange={manejarCambioInput}
-                  placeholder="https://ejemplo.com/imagen.jpg"
-                  style={{ flex: 1 }}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={manejarSubidaImagen}
                 />
-                <button type="button" onClick={() => setDatosFormulario({...datosFormulario, img: ''})} className="action-btn danger">
+                <button
+                  type="button"
+                  onClick={() => setDatosFormulario({...datosFormulario, img: ''})}
+                  className="action-btn danger"
+                >
                   Remover
                 </button>
               </div>
